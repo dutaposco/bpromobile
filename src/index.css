@@ -1,0 +1,29 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+@layer base {
+  :root {
+    /* LIGHT MODE COLORS */
+    --text-main: 30 41 59;        /* #1E293B Deep Navy Text */
+    --text-muted: 100 116 139;    /* #64748B Slate */
+    --surface: 255 255 255;       /* #FFFFFF Pure White */
+    --surface-alt: 248 250 252;   /* #F8FAFC Very Light Blue/Gray */
+    --brand-soft: 255 240 241;    /* #FFF0F1 Light Pinkish Red */
+  }
+  
+  .dark {
+    /* DARK MODE COLORS - True Pure Black Aesthetic */
+    --text-main: 248 250 252;     /* Crisp White Text */
+    --text-muted: 156 163 175;    /* Gray 400 */
+    --surface: 15 15 15;          /* #0F0F0F Jet Dark Gray (Elevated Cards/Nav) */
+    --surface-alt: 0 0 0;         /* #000000 Pitch Black Background */
+    --brand-soft: 45 15 15;       /* Subtle dark red tint */
+  }
+
+  body {
+    @apply bg-surfaceAlt text-textMain antialiased transition-colors duration-500;
+    font-family: 'Inter', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
