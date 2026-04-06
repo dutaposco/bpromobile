@@ -72,7 +72,7 @@ const TRAINING_PLANS = {
 
 // --- COMPONENTS ---
 
-const HomeScreen = ({ onSelectCourse, onNavigate, isPro }) => {
+const HomeScreen = ({ onSelectCourse, onNavigate, isPro, triggerPaywall }) => {
   const [activeCard, setActiveCard] = useState(0);
 
   const handleScroll = (e) => {
@@ -96,10 +96,18 @@ const HomeScreen = ({ onSelectCourse, onNavigate, isPro }) => {
          <div className="w-9 h-9 bg-brand rounded-full flex items-center justify-center text-white font-black text-xl shadow-glow">B</div>
          <span className="font-black text-[22px] tracking-tighter text-textMain">B<span className="text-brand">PRO</span></span>
        </div>
-       <div className="w-10 h-10 bg-surface border border-surfaceAlt rounded-full shadow-card flex items-center justify-center text-textMuted relative cursor-pointer active:scale-95 transition-transform">
-         <Bell size={20} />
-         <span className="absolute top-2 right-2.5 w-2 h-2 bg-brand rounded-full border border-surface"></span>
-       </div>
+       
+       {isPro ? (
+         <div className="flex items-center gap-1.5 bg-gradient-to-r from-amber-300 to-amber-500 px-3.5 py-2 rounded-full shadow-[0_0_15px_rgba(251,191,36,0.3)] cursor-pointer">
+            <Trophy size={14} className="text-slate-900 fill-current" />
+            <span className="text-[11px] font-black tracking-widest text-slate-900 uppercase">PRO MEMBER</span>
+         </div>
+       ) : (
+         <div onClick={triggerPaywall} className="flex items-center gap-1.5 bg-gradient-to-r from-brand to-accentOrange px-4 py-2.5 rounded-full shadow-glow cursor-pointer active:scale-95 transition-transform hover:scale-105">
+            <Zap size={14} className="text-white fill-current" />
+            <span className="text-[11px] font-black tracking-widest text-white uppercase">Go Pro</span>
+         </div>
+       )}
     </div>
 
     <div className="pt-6 mb-6">
@@ -443,63 +451,96 @@ const SubscriptionScreen = ({ onClose, onUpgrade }) => {
   return (
     <motion.div initial={{ y: '100%' }} animate={{ y: 0 }} exit={{ y: '100%' }} transition={{ type: 'spring', damping: 25, stiffness: 200 }} className="fixed inset-0 z-[100] bg-surface flex flex-col no-scrollbar overflow-y-auto">
       
-      {/* Dynamic Header */}
-      <div className="relative h-[300px] w-full bg-surfaceAlt flex flex-col items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-tr from-brand/20 to-transparent"></div>
-        <div className="absolute top-[-50px] right-[-50px] text-brandSoft opacity-50 transform rotate-12"><Shield size={250} /></div>
+      {/* Sleek Premium Dark Header */}
+      <div className="relative h-[340px] w-full bg-slate-900 flex flex-col items-center justify-center overflow-hidden">
+        {/* Glowing Orbs */}
+        <div className="absolute -top-20 -left-20 w-64 h-64 bg-brand/40 rounded-full blur-[80px]"></div>
+        <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-accentOrange/30 rounded-full blur-[80px]"></div>
         
-        <button onClick={onClose} className="absolute top-6 left-6 w-10 h-10 bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center text-textMain z-20">
+        {/* Subtle decorative grid overlay */}
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4xKSIvPjwvc3ZnPg==')] opacity-40"></div>
+        
+        {/* Close Button top-right */}
+        <button onClick={onClose} className="absolute top-6 right-6 w-10 h-10 bg-white/10 backdrop-blur-md rounded-full border border-white/20 flex items-center justify-center text-white z-20 hover:bg-white/20 transition-colors">
           <X size={20} />
         </button>
 
         <div className="relative z-10 text-center px-6 mt-8">
-           <div className="mx-auto w-16 h-16 bg-brand rounded-[20px] shadow-glow flex items-center justify-center text-white mb-4 transform -rotate-6">
-              <Trophy size={32} />
+           <div className="mx-auto w-20 h-20 bg-gradient-to-br from-brand to-accentOrange rounded-[24px] shadow-glow flex items-center justify-center text-white mb-6 transform rotate-3">
+              <Flame size={36} fill="currentColor" />
            </div>
-           <h1 className="text-3xl font-black text-textMain tracking-tight mb-2">BPRO Elite</h1>
-           <p className="text-textMuted text-sm font-semibold max-w-[250px] mx-auto">Unlock all premium training programs and level up your game.</p>
+           <h1 className="text-4xl font-black text-white tracking-tight mb-2">BPRO <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand to-accentOrange">PRO</span></h1>
+           <p className="text-gray-300 text-sm font-medium max-w-[260px] mx-auto">Unlock your true potential with full access to our premium training plans.</p>
         </div>
+
+        {/* Curved bottom edge bridging to content */}
+        <div className="absolute bottom-0 left-0 right-0 h-6 bg-surface rounded-t-[32px]"></div>
       </div>
 
-      <div className="flex-1 px-6 pt-6 pb-32">
-         {/* Features List */}
-         <div className="space-y-4 mb-8">
+      <div className="flex-1 px-6 pt-4 pb-32 bg-surface">
+         {/* Elevated Features List */}
+         <div className="space-y-3 mb-10">
             {[
               "Access 200+ Premium Drills",
               "1-on-1 Tactical Analysis",
               "Position Specific Masterclass",
-              "Ad-free 4K Video Quality"
+              "Offline 4K Video Downloads"
             ].map((feat, idx) => (
-              <div key={idx} className="flex items-center gap-4">
-                 <div className="w-6 h-6 rounded-full bg-brand/10 flex items-center justify-center flex-shrink-0 text-brand">
-                    <Check size={14} strokeWidth={3} />
+              <div key={idx} className="flex items-center gap-4 bg-surfaceAlt border border-surface p-4 rounded-[20px]">
+                 <div className="w-8 h-8 rounded-full bg-gradient-to-br from-brand to-accentOrange flex items-center justify-center flex-shrink-0 text-white shadow-sm">
+                    <Check size={16} strokeWidth={3} />
                  </div>
-                 <span className="text-sm font-bold text-textMain">{feat}</span>
+                 <span className="text-sm font-extrabold text-textMain">{feat}</span>
               </div>
             ))}
          </div>
 
-         {/* Pricing Card */}
-         <div className="bg-surfaceAlt border-2 border-brand/20 rounded-[32px] p-1 relative mb-8">
-            <span className="absolute -top-3 left-1/2 -translate-x-1/2 bg-brand text-white text-[10px] font-black uppercase tracking-widest px-4 py-1 rounded-full shadow-glow">Most Popular</span>
-            
-            <div className="bg-surface border border-brand p-6 rounded-[28px] text-center shadow-lg transform transition-transform active:scale-95 cursor-pointer">
-               <h3 className="text-textMuted text-sm font-bold uppercase tracking-widest mb-2 mt-2">12 Months Elite</h3>
-               <div className="flex items-baseline justify-center gap-1 mb-2">
-                 <span className="text-lg font-bold text-textMain">Rp</span>
-                 <span className="text-4xl font-black text-textMain tracking-tighter">99.000</span>
-                 <span className="text-sm font-bold text-textMuted">/mo</span>
-               </div>
-               <p className="text-xs font-semibold text-brand mb-4">Billed annually at Rp 1.188.000 (Save 40%)</p>
-               
-               <button onClick={onUpgrade} className="w-full py-4 rounded-[20px] bg-brand text-white font-black text-sm shadow-glow flex justify-center items-center gap-2">
-                  <Lock size={16} /> Upgrade to Elite Now
-               </button>
-            </div>
+         {/* Interactive Pricing Cards */}
+         <div className="space-y-4 mb-6">
+             {/* Annual Plan (Highlighted) */}
+             <div onClick={onUpgrade} className="relative bg-surfaceAlt border-2 border-brand rounded-[28px] p-5 shadow-glow cursor-pointer transform transition-transform active:scale-95 overflow-hidden">
+                <div className="absolute top-0 right-0 bg-brand text-white text-[10px] font-black uppercase tracking-widest px-4 py-1.5 rounded-bl-[16px] z-10">Save 40%</div>
+                <div className="absolute inset-0 bg-gradient-to-r from-brand/5 to-transparent"></div>
+                
+                <div className="relative z-10 flex justify-between items-center">
+                   <div>
+                      <h3 className="text-textMain text-sm font-black mb-1">Annual PRO</h3>
+                      <p className="text-[11px] font-semibold text-textMuted">Rp 1.188.000 / year</p>
+                   </div>
+                   <div className="text-right">
+                     <div className="flex items-baseline justify-end gap-1">
+                       <span className="text-sm font-bold text-textMain">Rp</span>
+                       <span className="text-2xl font-black text-brand tracking-tighter">99.000</span>
+                     </div>
+                     <span className="text-[10px] font-bold text-textMuted uppercase">/ Month</span>
+                   </div>
+                </div>
+             </div>
+
+             {/* Monthly Plan */}
+             <div onClick={onUpgrade} className="bg-surface border border-surfaceAlt rounded-[28px] p-5 shadow-sm cursor-pointer transform transition-transform active:scale-95 flex justify-between items-center hover:border-brand/30">
+                 <div>
+                    <h3 className="text-textMain text-sm font-black mb-1">Monthly PRO</h3>
+                    <p className="text-[11px] font-semibold text-textMuted">Flexible billing</p>
+                 </div>
+                 <div className="text-right">
+                   <div className="flex items-baseline justify-end gap-1">
+                     <span className="text-sm font-bold text-textMain">Rp</span>
+                     <span className="text-xl font-black text-textMain tracking-tighter">149.000</span>
+                   </div>
+                   <span className="text-[10px] font-bold text-textMuted uppercase">/ Month</span>
+                 </div>
+             </div>
          </div>
 
-         <p className="text-center text-[10px] font-semibold text-textMuted px-4">
-           By upgrading, you agree to our Terms of Service and Privacy Policy. Subscriptions auto-renew.
+         <div className="mt-2">
+            <button onClick={onUpgrade} className="w-full py-5 rounded-[24px] bg-gradient-to-r from-brand to-accentOrange text-white font-black text-base shadow-glow flex justify-center items-center gap-2 transform transition-all active:scale-[0.98] hover:scale-[1.02]">
+               <Lock size={18} fill="currentColor" /> UNLOCK BPRO PRO
+            </button>
+         </div>
+
+         <p className="text-center text-[10px] font-semibold text-textMuted mt-6 px-4">
+           Subscriptions auto-renew. Cancel anytime in App Settings. Terms of Service & Privacy Policy apply.
          </p>
       </div>
     </motion.div>
@@ -518,11 +559,13 @@ const ProfileScreen = ({ toggleTheme, isDark, isPro, triggerPaywall }) => {
 
       <div className="mb-8 flex flex-col items-center">
          <div className="relative mb-4">
-            <div className={`w-28 h-28 border-4 ${isPro ? 'border-brand' : 'border-surface'} rounded-full overflow-hidden shadow-soft transition-colors duration-500`}>
+            <div className={`w-28 h-28 border-4 ${isPro ? 'border-amber-400 shadow-[0_0_25px_rgba(251,191,36,0.4)]' : 'border-surface shadow-soft'} rounded-full overflow-hidden transition-all duration-500`}>
                <img src="https://i.pravatar.cc/150?img=11" alt="Player Profile" className="w-full h-full object-cover" />
             </div>
             {isPro && (
-              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute bottom-0 text-white right-0 bg-brand text-[9px] font-black tracking-widest px-3 py-1.5 rounded-full border-2 border-surface shadow-glow">ELITE</motion.div>
+              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute bottom-0 text-slate-900 right-0 bg-gradient-to-r from-amber-300 to-amber-500 text-[10px] font-black tracking-widest px-3 py-1.5 rounded-full border-2 border-surface shadow-md">
+                 PRO
+              </motion.div>
             )}
          </div>
          <h1 className="text-3xl font-black text-textMain tracking-tight">John Doe</h1>
@@ -630,7 +673,7 @@ export default function App() {
           {activeTab === 'home' && <HomeScreen onSelectCourse={handleSelectCourse} onNavigate={(id) => {
              if (id === 'football' || id === 'gym') setActiveTab('programs');
              else setActiveTab(id);
-          }} isPro={isUserPro} />}
+          }} isPro={isUserPro} triggerPaywall={() => setShowPaywall(true)} />}
           {activeTab === 'programs' && <ProgramsScreen onSelectCourse={handleSelectCourse} isPro={isUserPro} />}
           {activeTab === 'positions' && <PositionHubScreen onSelectCourse={handleSelectCourse} onBack={() => setActiveTab('home')} isPro={isUserPro} />}
           {activeTab === 'training_plan' && <TrainingPlanScreen onSelectCourse={handleSelectCourse} onBack={() => setActiveTab('home')} isPro={isUserPro} />}
